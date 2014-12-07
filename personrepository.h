@@ -6,23 +6,25 @@
 #include <algorithm>
 #include "comparer.h"
 #include "person.h"
+#include <QtSql>
 
 class PersonRepository {
 public:
     PersonRepository();
+    ~PersonRepository();
 
     bool add(Person p);
-    bool save();
 
-    double getSize();
+    //double getSize();
 
 
     vector<Person> search(string input, string word);
-    bool erase(vector<Person> results, string answer);
+    //bool erase(vector<Person> results, string answer);
     vector<Person> getSortedPersons(string sortOrder);
 
 private:
-    vector<Person> plist;
+    //vector<Person> plist;
+    QSqlDatabase db;
     void displayPerson(const int index);
     char searchFor();
 

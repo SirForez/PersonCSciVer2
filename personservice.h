@@ -9,12 +9,11 @@ public:
     PersonService();
 
     bool add(Person p);
-    bool save();
 
-    bool erase(vector<Person> results, string answer);
+    //bool erase(vector<Person> results, string answer);
     vector<Person> search(string input, string word);
 
-    double getSize();
+    //double getSize();
 
     vector<Person> getSortedPersons(string order);
 

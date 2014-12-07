@@ -13,7 +13,7 @@ public:
     void getPersonInput(Person& p);
     bool isValidCommand(string input);
 
-    void commandCenter(string input, int &saveCounter, int &editCounter);
+    void commandCenter(string input);
 
     char searchFor();
     bool isValidSearchColumn(char in);

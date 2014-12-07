@@ -8,7 +8,7 @@ UI::UI() {
 
 void UI::start() {
     string input;
-
+        //system("CLS");
         cout << "Good day to you, user." << endl;
         cout << "Welcome to the Great Computer Science Figure Database Ver. 2. - Now featuring SQLite! " << endl;
         cout << "GCSFD 2.0 for short." << endl;
@@ -17,8 +17,6 @@ void UI::start() {
         cout << endl;
 
 
-    int saveCounter = 0, editCounter = 0;
-
     while(true) {
 
         cout << ">> ";
@@ -26,7 +24,7 @@ void UI::start() {
         cout << endl;
 
         if(isValidCommand(input)) {
-            commandCenter(input, saveCounter, editCounter);
+            commandCenter(input);
 
         } else {
             cout << "Invalid command!" << endl;
@@ -59,13 +57,13 @@ void UI::getPersonInput(Person& p) {
 }
 
 bool UI::isValidCommand(string input) {
-    if (input == "help" || input == "add" || input == "display" || input == "clear" || input == "save" || input == "erase" || input == "search" || input == "exit") {
+    if (input == "help" || input == "add" || input == "display" || input == "clear" || input == "search" || input == "exit") {  /*|| input == "erase"*/
         return true;
     }
     return false;
 }
 
-void UI::commandCenter(string input, int &saveCounter, int &editCounter) {
+void UI::commandCenter(string input) {
     if (input == "help") {
         cout << "Available commands:\n";
         cout << endl;
@@ -74,12 +72,11 @@ void UI::commandCenter(string input, int &saveCounter, int &editCounter) {
         cout << "display\t ->  \t(displays repository (optionally sorted))\n";
         cout << "clear\t ->  \t(clears display)\n";
         cout << "search\t ->  \t(search in repository)\n";
-        cout << "erase\t ->  \t(erase from repository)\n";
-        cout << "save\t ->  \t(save changes)\n";
         cout << "exit\t ->  \t(quit)\n";
         cout << endl << endl;
         cout << "Interaction:\n";
         cout << ">>\t (waiting for command)\n";
+        cout << "All changes and additions are saved automatically!\n";
         cout << endl << endl;
 
     } else if (input == "add") {
@@ -94,8 +91,6 @@ void UI::commandCenter(string input, int &saveCounter, int &editCounter) {
             } else {
                 cout << "ERROR: Person not added!" << endl;
             }
-            editCounter++;
-
         } else {
             cout << "ERROR: invalid person entered!" << endl;
             cout << endl;
@@ -103,9 +98,19 @@ void UI::commandCenter(string input, int &saveCounter, int &editCounter) {
 
     } else if (input == "display") {
         cout << endl;
-        cout << "Sort by (name/gender/date of birth/date of death)? ";
+        char ans;
         string sortOrder;
-        getline(cin, sortOrder);
+        cout << "Would you like to have it sorted (y/n)? ";
+        cin >> ans;
+        if(ans == 'Y' || ans == 'y') {
+            cout << endl;
+            cout << "Sort by (name/gender/date of birth/date of death)? ";
+            cin.ignore();
+            getline(cin, sortOrder);
+        } else {
+            cin.ignore();
+            sortOrder = "";
+        }
         vector<Person> SortedPersons = Pservice.getSortedPersons(sortOrder);
         displayAllPersons(SortedPersons);
 
@@ -113,7 +118,7 @@ void UI::commandCenter(string input, int &saveCounter, int &editCounter) {
         system("cls");
 
     } else if (input == "erase") {
-        string answer;
+        /*string answer;
         cout << "What would you like to erase (all/specific)? ";
         getline(cin, answer);
 
@@ -126,8 +131,7 @@ void UI::commandCenter(string input, int &saveCounter, int &editCounter) {
             cout << endl;
             cout << "Person(s) erased!" << endl;
             cout << endl;
-        }
-        editCounter++;
+        }*/
 
     } else if (input == "search") {
         vector<Person> result = searchSwitch(searchFor());
@@ -139,21 +143,8 @@ void UI::commandCenter(string input, int &saveCounter, int &editCounter) {
             cout << endl;
         }
 
-    } else if (input == "save") {
-        bool saved = Pservice.save();
-        if(saved) {
-            cout << endl;
-            cout << "All changes have been saved, and your specimen has been processed (we werent even testing for that)!" << endl;
-            cout << endl;
-        } else {
-            cout << "ERROR: File not saved!" << endl;
-            cout << endl;
-        }
-        saveCounter++;
-        editCounter = 0;
-
     }  else if (input == "exit") {
-        if((editCounter != 0)) {
+        /*if((editCounter != 0)) {
             char answer;
             cout << "You have unsaved changes, would you like to save (y/n)? ";
             cin >> answer;
@@ -162,7 +153,7 @@ void UI::commandCenter(string input, int &saveCounter, int &editCounter) {
                 Pservice.save();
             }
         }
-
+*/
         cout << "Thanks for using our database program!" << endl;
         cout << endl;
         exit(0);
@@ -203,6 +194,7 @@ vector<Person> UI::searchSwitch(char searchColumn) {
             cin.ignore();
             getline(cin, input);
             word = "name";
+            cout << endl;
             return Pservice.search(input, word);
             break;
 
@@ -211,6 +203,7 @@ vector<Person> UI::searchSwitch(char searchColumn) {
             cin.ignore();
             getline(cin, input);
             word = "gender";
+            cout << endl;
             return Pservice.search(input, word);
             break;
 
@@ -219,6 +212,7 @@ vector<Person> UI::searchSwitch(char searchColumn) {
             cin.ignore();
             getline(cin, input);
             word = "dayOfBirth";
+            cout << endl;
             return Pservice.search(input, word);
             break;
 
@@ -227,6 +221,7 @@ vector<Person> UI::searchSwitch(char searchColumn) {
             cin.ignore();
             getline(cin, input);
             word = "dayOfDeath";
+            cout << endl;
             return Pservice.search(input, word);
             break;
         default:
