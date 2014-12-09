@@ -21,6 +21,9 @@ public:
     string getDayOfDeath();
     void setDayOfDeath(string s);
 
+    int getID();
+    void setID(int id);
+
     bool isValidPerson();
 
 private:
@@ -28,6 +31,7 @@ private:
     string gender;
     string dayOfBirth;
     string dayOfDeath;
+    int ID;
 
 };
 

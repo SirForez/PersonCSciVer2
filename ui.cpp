@@ -65,7 +65,7 @@ void UI::getComputerInput(Computer& c) {
     getline(cin, temp);
     c.setName(temp);
 
-    cout << "Build Year: ";
+    cout << "Build Year(YYYY/Never built): ";
     getline(cin, temp);
     c.setBuildYear(temp);
 
@@ -201,13 +201,31 @@ void UI::commandCenter(string input) {
         }*/
 
     } else if (input == "search") {
-        vector<Person> result = searchSwitch(searchFor());
-        if(result.size()) {
-            displayPerson(result);
+        string searchType;
+        cout << "Search for a person or a computer (person/computer)? ";
+        getline(cin,searchType);
+        if(searchType != "person" && searchType != "computer") {
+            cout << "ERROR: Invalid type for search!" << endl;
+        }
+        char searchColumn = searchFor(searchType);
+        if(searchType == "person") {
+            vector<Person> result = personSearchSwitch(searchColumn);
+            if(result.size()) {
+                displayPerson(result);
+            } else {
+                cout << endl;
+                cout << "ERROR: No results found!" << endl;
+                cout << endl;
+            }
         } else {
-            cout << endl;
-            cout << "No results found!" << endl;
-            cout << endl;
+            vector<Computer> result = computerSearchSwitch(searchColumn);
+            if(result.size()) {
+                displayComputer(result);
+            } else {
+                cout << endl;
+                cout << "ERROR: No results found!" << endl;
+                cout << endl;
+            }
         }
 
     }  else if (input == "exit") {
@@ -228,17 +246,25 @@ void UI::commandCenter(string input) {
 
 }
 
-char UI::searchFor() {
+char UI::searchFor(string type) {
 
     char searchFor;
-    cout << "enter 'n' to search for name " << endl;
-    cout << "enter 'g' to search for gender " << endl;
-    cout << "enter 'b' to search for birthdate " << endl;
-    cout << "enter 'd' to search for deceased date " << endl;
+    if(type == "person") {
+        cout << "1: to search for name " << endl;
+        cout << "2: to search for gender " << endl;
+        cout << "3: to search for birthdate " << endl;
+        cout << "4: to search for deceased date " << endl;
+    } else {
+        cout << "1: to search for name " << endl;
+        cout << "2: to search for build year " << endl;
+        cout << "3: to search for type " << endl;
+        cout << "4: to search for built(boolean) " << endl;
+    }
     do {
+        cout << "Enter value here: ";
         cin >> searchFor;
         if(!isValidSearchColumn(searchFor)) {
-            cout << "Invalid command! Enter 'n' 'g' 'b' or 'd'" << endl;
+            cout << "Invalid command! Enter '1' '2' '3' or '4'" << endl;
         }
     } while(!isValidSearchColumn(searchFor));
     cout << endl;
@@ -247,16 +273,16 @@ char UI::searchFor() {
 }
 
 bool UI::isValidSearchColumn(char in) {
-    if (in == 'n' || in == 'g' || in == 'b' || in == 'd') {
+    if (in == '1' || in == '2' || in == '3' || in == '4') {
         return true;
     }
     return false;
 }
 
-vector<Person> UI::searchSwitch(char searchColumn) {
+vector<Person> UI::personSearchSwitch(char searchColumn) {
     string input, word;
     switch(searchColumn){
-        case 'n':
+        case '1':
             cout << "Enter name: ";
             cin.ignore();
             getline(cin, input);
@@ -265,7 +291,7 @@ vector<Person> UI::searchSwitch(char searchColumn) {
             return Pservice.search(input, word);
             break;
 
-        case 'g':
+        case '2':
             cout << "Enter gender: ";
             cin.ignore();
             getline(cin, input);
@@ -274,7 +300,7 @@ vector<Person> UI::searchSwitch(char searchColumn) {
             return Pservice.search(input, word);
             break;
 
-        case 'b':
+        case '3':
             cout << "Enter date of birth: ";
             cin.ignore();
             getline(cin, input);
@@ -283,13 +309,56 @@ vector<Person> UI::searchSwitch(char searchColumn) {
             return Pservice.search(input, word);
             break;
 
-        case 'd':
+        case '4':
             cout << "Enter date of death: ";
             cin.ignore();
             getline(cin, input);
             word = "dayOfDeath";
             cout << endl;
             return Pservice.search(input, word);
+            break;
+        default:
+            throw;
+    }
+}
+
+vector<Computer> UI::computerSearchSwitch(char searchColumn) {
+    string input, word;
+    switch(searchColumn){
+        case '1':
+            cout << "Enter name: ";
+            cin.ignore();
+            getline(cin, input);
+            word = "name";
+            cout << endl;
+            return Cservice.search(input, word);
+            break;
+
+        case '2':
+            cout << "Enter build year (YYYY/Never built): ";
+            cin.ignore();
+            getline(cin, input);
+            word = "buildyear";
+            cout << endl;
+            return Cservice.search(input, word);
+            break;
+
+        case '3':
+            cout << "Enter type: ";
+            cin.ignore();
+            getline(cin, input);
+            word = "type";
+            cout << endl;
+            return Cservice.search(input, word);
+            break;
+
+        case '4':
+            cout << "Enter whether the computer was built (0/1): ";
+            cin.ignore();
+            getline(cin, input);
+            word = "built";
+            cout << endl;
+            return Cservice.search(input, word);
             break;
         default:
             throw;
@@ -309,9 +378,13 @@ void UI::displayPerson(vector<Person> results) {
 void UI::displayComputer(vector<Computer> results) {
     for(int i = 0; i < results.size(); i++) {
         cout << "Name:\t\t" << results[i].getName() << endl;
-        cout << "Build Year:\t\t"<< results[i].getBuildYear() << endl;
+        cout << "Build Year:\t"<< results[i].getBuildYear() << endl;
         cout << "Type:\t\t" << results[i].getType() << endl;
-        cout << "Built?\t\t" << results[i].getBuilt() << endl;
+        if(results[i].getBuilt() == true) {
+            cout << "Built?\t\t" << "true)" << endl;
+        } else {
+            cout << "Built?\t\t" << "false" << endl;
+        }
         cout << endl;
     }
 }
@@ -326,7 +399,7 @@ void UI::displayAllPersons(vector<Person> vec) {
     cout << left << "Date of birth:";
     cout.width(25);
     cout << left << "Date of death:" << endl;
-    for(int i = 0; i < 86; i++) {
+    for(int i = 0; i < 100; i++) {
         cout << "-";
     }
     cout << endl;
@@ -342,7 +415,7 @@ void UI::displayAllPersons(vector<Person> vec) {
         cout << left << vec[i].getDayOfDeath();
         cout << endl << endl;
     }
-    for(int i = 0; i < 86; i++) {
+    for(int i = 0; i < 100; i++) {
         cout << "-";
     }
     cout << endl;
@@ -351,31 +424,31 @@ void UI::displayAllPersons(vector<Person> vec) {
 
 void UI::displayAllComputers(vector<Computer> vec) {
     cout << endl;
-    cout.width(36);
+    cout.width(30);
     cout << left << "Name:";
     cout.width(18);
     cout << left << "Build Year:";
-    cout.width(18);
+    cout.width(44);
     cout << left << "Type:";
     cout.width(25);
     cout << left << "Built?" << endl;
-    for(int i = 0; i < 86; i++) {
+    for(int i = 0; i < 100; i++) {
         cout << "-";
     }
     cout << endl;
     for(int i = 0; i < vec.size(); i++) {
 
-        cout.width(36);
+        cout.width(30);
         cout << left << vec[i].getName();
         cout.width(18);
         cout << left << vec[i].getBuildYear();
-        cout.width(18);
+        cout.width(44);
         cout << left << vec[i].getType();
         cout.width(25);
         cout << left << vec[i].getBuilt();
         cout << endl << endl;
     }
-    for(int i = 0; i < 86; i++) {
+    for(int i = 0; i < 100; i++) {
         cout << "-";
     }
     cout << endl;

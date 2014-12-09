@@ -20,7 +20,6 @@ SOURCES += main.cpp \
     person.cpp \
     personservice.cpp \
     personrepository.cpp \
-    comparer.cpp \
     computerservice.cpp \
     computerrepository.cpp \
     computer.cpp
@@ -30,7 +29,6 @@ HEADERS += \
     person.h \
     personservice.h \
     personrepository.h \
-    comparer.h \
     computerservice.h \
     computerrepository.h \
     computer.h

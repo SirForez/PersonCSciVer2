@@ -40,11 +40,19 @@ void Computer::setBuilt(bool b) {
     built  = b;
 }
 
+int Computer::getID() {
+    return ID;
+}
+
+void Computer::setID(int id) {
+    ID = id;
+}
+
 bool Computer::isValidComputer() {
     if(name != "") {
         if(type != "") {
             int counter = 0;
-            if(buildYear != "-") {
+            if(buildYear != "Never built") {
                 for(int i = 0; i < 3; i++) {
                     if(isdigit(buildYear[i])) {
                         counter++;

@@ -16,9 +16,8 @@ public:
 
     void commandCenter(string input);
 
-    char searchFor();
+    char searchFor(string type);
     bool isValidSearchColumn(char in);
-    vector<Person> searchSwitch(char searchColumn);
 
     void displayPerson(vector<Person> results);
     void displayAllPersons(vector<Person> vec);
@@ -26,6 +25,9 @@ public:
     void getComputerInput(Computer &c);
     void displayAllComputers(vector<Computer> vec);
     void displayComputer(vector<Computer> results);
+
+    vector<Computer> computerSearchSwitch(char searchColumn);
+    vector<Person> personSearchSwitch(char searchColumn);
 private:
     PersonService Pservice;
     computerservice Cservice;

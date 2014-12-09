@@ -20,6 +20,9 @@ public:
     bool getBuilt();
     void setBuilt(bool b);
 
+    int getID();
+    void setID(int id);
+
     bool isValidComputer();
 
 private:
@@ -27,6 +30,7 @@ private:
     string buildYear;
     string type;
     bool built;
+    int ID;
 
 };
 

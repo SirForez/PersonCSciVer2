@@ -40,6 +40,14 @@ void Person::setDayOfDeath(string s) {
     dayOfDeath = s;
 }
 
+int Person::getID() {
+    return ID;
+}
+
+void Person::setID(int id) {
+    ID = id;
+}
+
 bool Person::isValidPerson() {
     if (name != "") {
         if(gender == "Male" || gender == "Female") {

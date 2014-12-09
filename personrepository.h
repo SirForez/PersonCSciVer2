@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "comparer.h"
 #include "person.h"
 #include <QtSql>
 

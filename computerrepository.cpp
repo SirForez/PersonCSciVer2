@@ -40,13 +40,13 @@ vector<Computer> computerRepository::getSortedComputers(string sortOrder) {
     if(sortOrder == "name") {
         query.prepare("SELECT * FROM Computers ORDER BY Name");
 
-    } else if(sortOrder == "gender") {
+    } else if(sortOrder == "buildyear") {
         query.prepare("SELECT * FROM Computers ORDER BY BuildYear");
 
-    } else if(sortOrder == "date of birth") {
+    } else if(sortOrder == "type") {
         query.prepare("SELECT * FROM Computers ORDER BY Type");
 
-    } else if(sortOrder == "date of death") {
+    } else if(sortOrder == "built") {
         query.prepare("SELECT * FROM Computers ORDER BY Built");
     } else {
         query.prepare("SELECT * FROM Computers");
@@ -63,6 +63,7 @@ vector<Computer> computerRepository::getSortedComputers(string sortOrder) {
         c.setBuildYear(query.value("BuildYear").toString().toStdString());
         c.setType(query.value("Type").toString().toStdString());
         c.setBuilt(query.value("Built").toInt());
+        c.setID(query.value("ID").toInt());
 
         temp.push_back(c);
     }
@@ -106,6 +107,7 @@ vector<Computer> computerRepository::search(string input, string word) {
         c.setBuildYear(query.value("BuildYear").toString().toStdString());
         c.setType(query.value("Type").toString().toStdString());
         c.setBuilt(query.value("Built").toInt());
+        c.setID(query.value("ID").toInt());
 
         temp.push_back(c);
     }

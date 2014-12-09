@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include "comparer.h"
 #include <iomanip>
 #include <QtSql>
 
@@ -68,6 +67,7 @@ vector<Person> PersonRepository::getSortedPersons(string sortOrder) {
         p.setGender(q.value("Gender").toString().toStdString());
         p.setDayOfBirth(q.value("DateOfBirth").toString().toStdString());
         p.setDayOfDeath(q.value("DateOfDeath").toString().toStdString());
+        p.setID(q.value("ID").toInt());
 
         temp.push_back(p);
     }
@@ -132,7 +132,7 @@ vector<Person> PersonRepository::search(string input, string word) {
     QSqlQuery query;
 
     if(word == "name") {
-        query.prepare("SELECT * FROM Persons p WHERE p.Name LIKE :contains;");
+        query.prepare("SELECT * FROM Persons p WHERE p.Name LIKE :contains");
         query.bindValue(":contains",likeInput);
 
     } else if(word == "gender") {
@@ -157,6 +157,7 @@ vector<Person> PersonRepository::search(string input, string word) {
         tempP.setGender(query.value("Gender").toString().toStdString());
         tempP.setDayOfBirth(query.value("DateOfBirth").toString().toStdString());
         tempP.setDayOfDeath(query.value("DateOfDeath").toString().toStdString());
+        tempP.setID(query.value("ID").toInt());
 
         temp.push_back(tempP);
     }
