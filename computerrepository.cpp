@@ -1,6 +1,7 @@
 #include "computerrepository.h"
 #include <vector>
 #include "computer.h"
+#include "person.h"
 #include <QtSql>
 
 using namespace std;
@@ -114,5 +115,28 @@ vector<Computer> computerRepository::search(string input, string word) {
     db.close();
     return temp;
 
+}
+
+vector<Computer> computerRepository::getComputersFromScientist(Person scientist) {
+    db.open();
+    vector<Computer> temp;
+    QSqlQuery query;
+    query.prepare("SELECT * FROM Computers c JOIN Linker l ON l.c_ID = c.ID AND l.p_ID = ?");
+    query.addBindValue(scientist.getID());
+    query.exec();
+    while(query.next()) {
+        Computer c;
+
+        c.setName(query.value("Name").toString().toStdString());
+        c.setBuildYear(query.value("BuildYear").toString().toStdString());
+        c.setType(query.value("Type").toString().toStdString());
+        c.setBuilt(query.value("Built").toInt());
+        c.setID(query.value("ID").toInt());
+
+        temp.push_back(c);
+    }
+
+    db.close();
+    return temp;
 }
 

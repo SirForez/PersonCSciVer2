@@ -12,6 +12,7 @@ public:
     bool add(Computer c);
     vector<Computer> getSortedComputers(string sortOrder);
     vector<Computer> search(string input, string word);
+    vector<Computer> getComputersFromScientist(Person scientist);
 private:
     computerRepository compRepo;
 };

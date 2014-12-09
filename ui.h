@@ -28,6 +28,8 @@ public:
 
     vector<Computer> computerSearchSwitch(char searchColumn);
     vector<Person> personSearchSwitch(char searchColumn);
+
+    void displayConnections(vector<Person> sortedPersons);
 private:
     PersonService Pservice;
     computerservice Cservice;

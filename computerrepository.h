@@ -4,6 +4,7 @@
 #include <vector>
 #include <QtSql>
 #include "computer.h"
+#include "person.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ public:
 
     bool add(Computer c);
 
+    vector<Computer> getComputersFromScientist(Person scientist);
 private:
     QSqlDatabase db;
 };

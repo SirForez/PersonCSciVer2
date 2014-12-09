@@ -82,7 +82,7 @@ void UI::getComputerInput(Computer& c) {
 }
 
 bool UI::isValidCommand(string input) {
-    if (input == "help" || input == "add" || input == "display" || input == "clear" || input == "search" || input == "exit") {  /*|| input == "erase"*/
+    if (input == "help" || input == "add" || input == "display" || input == "connections" || input == "clear" || input == "search" || input == "exit") {  /*|| input == "erase"*/
         return true;
     }
     return false;
@@ -92,15 +92,16 @@ void UI::commandCenter(string input) {
     if (input == "help") {
         cout << "Available commands:\n";
         cout << endl;
-        cout << "help\t ->  \t(get list of commands)\n";
-        cout << "add\t ->  \t(add to repository)\n";
-        cout << "display\t ->  \t(displays repository (optionally sorted))\n";
-        cout << "clear\t ->  \t(clears display)\n";
-        cout << "search\t ->  \t(search in repository)\n";
-        cout << "exit\t ->  \t(quit)\n";
+        cout << "help\t\t ->  \t(get list of commands)\n";
+        cout << "add\t\t ->  \t(add to repository)\n";
+        cout << "display\t\t ->  \t(displays repository (optionally sorted))\n";
+        cout << "connections\t\t ->  \t(displays all connections)\n";
+        cout << "clear\t\t ->  \t(clears display)\n";
+        cout << "search\t\t ->  \t(search in repository)\n";
+        cout << "exit\t\t ->  \t(quit)\n";
         cout << endl << endl;
         cout << "Interaction:\n";
-        cout << ">>\t (waiting for command)\n";
+        cout << ">>\t\t (waiting for command)\n";
         cout << "All changes and additions are saved automatically!\n";
         cout << endl << endl;
 
@@ -199,6 +200,9 @@ void UI::commandCenter(string input) {
             cout << "Person(s) erased!" << endl;
             cout << endl;
         }*/
+
+    } else if (input == "connections") {
+        displayConnections(Pservice.getSortedPersons("name"));
 
     } else if (input == "search") {
         string searchType;
@@ -453,4 +457,40 @@ void UI::displayAllComputers(vector<Computer> vec) {
     }
     cout << endl;
     cout << endl;
+}
+
+void UI::displayConnections(vector<Person> sortedPersons) {
+    cout << endl;
+    cout.width(30);
+    cout << left << "Scientist Name:";
+    cout.width(30);
+    cout << left << "Connected computers:" << endl;
+    for(int i = 0; i < 60; i++) {
+        cout << "-";
+    }
+    cout << endl;
+    for(int i = 0; i < sortedPersons.size(); i++) {
+        cout.width(30);
+        cout << left << sortedPersons[i].getName() + ": ";
+        vector<Computer> connectedComputers = Cservice.getComputersFromScientist(sortedPersons[i]);
+        if(connectedComputers.size()) {
+            cout.width(30);
+            string comp;
+            for(int j = 0; j < connectedComputers.size(); j++) {
+                if(j != connectedComputers.size() - 1) {
+                    comp += connectedComputers[j].getName() + ", ";
+                } else {
+                    comp += connectedComputers[j].getName() + ".";
+                }
+            }
+            cout << comp;
+        } else {
+            cout << "No connection in database.";
+        }
+        cout << endl << endl;
+    }
+    for(int i = 0; i < 60; i++) {
+        cout << "-";
+    }
+    cout << endl << endl;
 }

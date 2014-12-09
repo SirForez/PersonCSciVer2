@@ -18,3 +18,7 @@ vector<Computer> computerservice::getSortedComputers(string sortOrder) {
 vector<Computer> computerservice::search(string input, string word) {
     return compRepo.search(input, word);
 }
+
+vector<Computer> computerservice::getComputersFromScientist(Person scientist) {
+    return compRepo.getComputersFromScientist(scientist);
+}
