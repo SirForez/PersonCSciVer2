@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "PersonService.h"
+#include "computerservice.h"
 
 class UI {
 public:
@@ -22,8 +23,12 @@ public:
     void displayPerson(vector<Person> results);
     void displayAllPersons(vector<Person> vec);
 
+    void getComputerInput(Computer &c);
+    void displayAllComputers(vector<Computer> vec);
+    void displayComputer(vector<Computer> results);
 private:
     PersonService Pservice;
+    computerservice Cservice;
 };
 
 #endif // UI_H_INCLUDED

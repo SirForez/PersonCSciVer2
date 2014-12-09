@@ -7,8 +7,7 @@
 
 using namespace std;
 
-class Comparer
-{
+class Comparer {
 public:
     Comparer();
     Comparer(string ord);

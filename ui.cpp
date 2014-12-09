@@ -4,6 +4,7 @@
 
 UI::UI() {
     Pservice = PersonService();
+    Cservice = computerservice();
 }
 
 void UI::start() {
@@ -56,6 +57,30 @@ void UI::getPersonInput(Person& p) {
     cout << endl;
 }
 
+void UI::getComputerInput(Computer& c) {
+    string temp;
+    bool tempbool;
+
+    cout << "Name: ";
+    getline(cin, temp);
+    c.setName(temp);
+
+    cout << "Build Year: ";
+    getline(cin, temp);
+    c.setBuildYear(temp);
+
+    cout << "Type: ";
+    getline(cin, temp);
+    c.setType(temp);
+
+    cout << "Built (0(false)/1(true))? ";
+    cin >> tempbool;
+    c.setBuilt(tempbool);
+    cin.ignore();
+
+    cout << endl;
+}
+
 bool UI::isValidCommand(string input) {
     if (input == "help" || input == "add" || input == "display" || input == "clear" || input == "search" || input == "exit") {  /*|| input == "erase"*/
         return true;
@@ -80,39 +105,81 @@ void UI::commandCenter(string input) {
         cout << endl << endl;
 
     } else if (input == "add") {
-        Person temp;
-        getPersonInput(temp);
-        if(temp.isValidPerson()) {
-            bool added = Pservice.add(temp);
-            if(added) {
-                cout << endl;
-                cout << "Person added!" << endl;
-                cout << endl;
+        string answer;
+        cout << "Person or computer? ";
+        getline(cin, answer);
+        if(answer == "person") {
+            Person temp;
+            getPersonInput(temp);
+            if(temp.isValidPerson()) {
+                bool added = Pservice.add(temp);
+                if(added) {
+                    cout << endl;
+                    cout << "Person added!" << endl;
+                    cout << endl;
+                } else {
+                    cout << "ERROR: Person not added!" << endl;
+                }
             } else {
-                cout << "ERROR: Person not added!" << endl;
+                cout << "ERROR: invalid person entered!" << endl;
+                cout << endl;
             }
-        } else {
-            cout << "ERROR: invalid person entered!" << endl;
+        } else if(answer == "computer") {
+            Computer temp;
+            getComputerInput(temp);
+            if(temp.isValidComputer()) {
+                bool added = Cservice.add(temp);
+                if(added) {
+                    cout << endl;
+                    cout << "Computer added!" << endl;
+                    cout << endl;
+                } else {
+                    cout << "ERROR: Computer not added!" << endl;
+                }
+            } else {
+                cout << "ERROR: invalid computer entered!" << endl;
+            }
+        }
+    } else if (input == "display") {
+        string answer;
+        cout << "Person or computer? ";
+        getline(cin, answer);
+        if(answer == "person") {
             cout << endl;
+            char ans;
+            string sortOrder;
+            cout << "Would you like to have it sorted (y/n)? ";
+            cin >> ans;
+            if(ans == 'Y' || ans == 'y') {
+                cout << endl;
+                cout << "Sort by (name/gender/date of birth/date of death)? ";
+                cin.ignore();
+                getline(cin, sortOrder);
+            } else {
+                cin.ignore();
+                sortOrder = "";
+            }
+            vector<Person> SortedPersons = Pservice.getSortedPersons(sortOrder);
+            displayAllPersons(SortedPersons);
+        } else if(answer == "computer") {
+            cout << endl;
+            char ans;
+            string sortOrder;
+            cout << "Would you like to have it sorted (y/n)? ";
+            cin >> ans;
+            if(ans == 'Y' || ans == 'y') {
+                cout << endl;
+                cout << "Sort by (name/buildyear/type/built)? ";
+                cin.ignore();
+                getline(cin, sortOrder);
+            } else {
+                cin.ignore();
+                sortOrder = "";
+            }
+            vector<Computer> SortedComputers = Cservice.getSortedComputers(sortOrder);
+            displayAllComputers(SortedComputers);
         }
 
-    } else if (input == "display") {
-        cout << endl;
-        char ans;
-        string sortOrder;
-        cout << "Would you like to have it sorted (y/n)? ";
-        cin >> ans;
-        if(ans == 'Y' || ans == 'y') {
-            cout << endl;
-            cout << "Sort by (name/gender/date of birth/date of death)? ";
-            cin.ignore();
-            getline(cin, sortOrder);
-        } else {
-            cin.ignore();
-            sortOrder = "";
-        }
-        vector<Person> SortedPersons = Pservice.getSortedPersons(sortOrder);
-        displayAllPersons(SortedPersons);
 
     } else if (input == "clear") {
         system("cls");
@@ -239,6 +306,16 @@ void UI::displayPerson(vector<Person> results) {
     }
 }
 
+void UI::displayComputer(vector<Computer> results) {
+    for(int i = 0; i < results.size(); i++) {
+        cout << "Name:\t\t" << results[i].getName() << endl;
+        cout << "Build Year:\t\t"<< results[i].getBuildYear() << endl;
+        cout << "Type:\t\t" << results[i].getType() << endl;
+        cout << "Built?\t\t" << results[i].getBuilt() << endl;
+        cout << endl;
+    }
+}
+
 void UI::displayAllPersons(vector<Person> vec) {
     cout << endl;
     cout.width(36);
@@ -263,6 +340,39 @@ void UI::displayAllPersons(vector<Person> vec) {
         cout << left << vec[i].getDayOfBirth();
         cout.width(25);
         cout << left << vec[i].getDayOfDeath();
+        cout << endl << endl;
+    }
+    for(int i = 0; i < 86; i++) {
+        cout << "-";
+    }
+    cout << endl;
+    cout << endl;
+}
+
+void UI::displayAllComputers(vector<Computer> vec) {
+    cout << endl;
+    cout.width(36);
+    cout << left << "Name:";
+    cout.width(18);
+    cout << left << "Build Year:";
+    cout.width(18);
+    cout << left << "Type:";
+    cout.width(25);
+    cout << left << "Built?" << endl;
+    for(int i = 0; i < 86; i++) {
+        cout << "-";
+    }
+    cout << endl;
+    for(int i = 0; i < vec.size(); i++) {
+
+        cout.width(36);
+        cout << left << vec[i].getName();
+        cout.width(18);
+        cout << left << vec[i].getBuildYear();
+        cout.width(18);
+        cout << left << vec[i].getType();
+        cout.width(25);
+        cout << left << vec[i].getBuilt();
         cout << endl << endl;
     }
     for(int i = 0; i < 86; i++) {

@@ -2,8 +2,8 @@
 using namespace std;
 #include "ui.h"
 
-int main()
-{
+int main() {
+
     UI interface = UI();
 
     interface.start();

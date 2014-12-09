@@ -22,6 +22,7 @@ public:
     //bool erase(vector<Person> results, string answer);
     vector<Person> getSortedPersons(string sortOrder);
 
+    QSqlDatabase getDatabaseConnection();
 private:
     //vector<Person> plist;
     QSqlDatabase db;

@@ -10,7 +10,9 @@
 using namespace std;
 
 PersonRepository::PersonRepository() {
-    if(!db.isOpen()) {
+    if(QSqlDatabase::contains("qt_sql_default_connection")) {
+        db = QSqlDatabase::database("qt_sql_default_connection");
+    } else {
         db = QSqlDatabase::addDatabase("QSQLITE");
         db.setDatabaseName("PersonCompSci.sqlite");
         db.open();
@@ -39,7 +41,6 @@ bool PersonRepository::add(Person p) {
 vector<Person> PersonRepository::getSortedPersons(string sortOrder) {
     db.open();
     QSqlQuery q;
-    q.prepare("SELECT * FROM Persons ORDER BY Name");
 
     if(sortOrder == "name") {
         q.prepare("SELECT * FROM Persons ORDER BY Name");
@@ -72,6 +73,19 @@ vector<Person> PersonRepository::getSortedPersons(string sortOrder) {
     }
     db.close();
     return temp;
+}
+
+QSqlDatabase PersonRepository::getDatabaseConnection() {
+    QString connectionName = "PersonConnection";
+    QSqlDatabase db;
+    if(QSqlDatabase::contains(connectionName)) {
+        db = QSqlDatabase::database(connectionName);
+    } else {
+        db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+        db.setDatabaseName("PersonCompSci.sqlite");
+        db.open();
+    }
+    return db;
 }
 
 /*bool PersonRepository::erase(vector<Person> results, string answer) {

@@ -1,8 +1,7 @@
 #include "person.h"
 #include <string>
 
-Person::Person()
-{
+Person::Person() {
     name = "";
     gender = "";
     dayOfBirth = "";
