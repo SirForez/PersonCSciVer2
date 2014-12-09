@@ -13,6 +13,7 @@ public:
     vector<Computer> getSortedComputers(string sortOrder);
     vector<Computer> search(string input, string word);
     vector<Computer> getComputersFromScientist(Person scientist);
+    bool connectComputerToScientist(int PersonID, int ComputerID);
 private:
     computerRepository compRepo;
 };

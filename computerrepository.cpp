@@ -140,3 +140,15 @@ vector<Computer> computerRepository::getComputersFromScientist(Person scientist)
     return temp;
 }
 
+bool computerRepository::connectComputerToScientist(int PersonID, int ComputerID) {
+    db.open();
+    QSqlQuery query;
+    query.prepare("INSERT INTO Linker(p_ID, c_ID) VALUES(:personID, :computerID)");
+    query.bindValue(":personID", QString::number(PersonID));
+    query.bindValue(":computerID", QString::number(ComputerID));
+    if(!query.exec()) {
+        return false;
+    } else {
+        return true;
+    }
+}

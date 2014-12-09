@@ -22,3 +22,7 @@ vector<Computer> computerservice::search(string input, string word) {
 vector<Computer> computerservice::getComputersFromScientist(Person scientist) {
     return compRepo.getComputersFromScientist(scientist);
 }
+
+bool computerservice::connectComputerToScientist(int PersonID, int ComputerID) {
+    return compRepo.connectComputerToScientist(PersonID, ComputerID);
+}
