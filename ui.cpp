@@ -37,7 +37,7 @@ void UI::start() {
 
 void UI::getPersonInput(Person& p) {
     string temp;
-
+    cout << "Person ID's are automatically added to the person from the database." << endl;
     cout << "Name: ";
     getline(cin, temp);
     p.setName(temp);
@@ -60,7 +60,7 @@ void UI::getPersonInput(Person& p) {
 void UI::getComputerInput(Computer& c) {
     string temp;
     bool tempbool;
-
+    cout << "Computer ID's are automatically added to the person from the database." << endl;
     cout << "Name: ";
     getline(cin, temp);
     c.setName(temp);
@@ -82,7 +82,7 @@ void UI::getComputerInput(Computer& c) {
 }
 
 bool UI::isValidCommand(string input) {
-    if (input == "help" || input == "add" || input == "display" || input == "connections" || input == "clear" || input == "search" || input == "exit") {  /*|| input == "erase"*/
+    if (input == "help" || input == "add" || input == "form connection" || input == "display" || input == "connections" || input == "clear" || input == "search" || input == "exit") {
         return true;
     }
     return false;
@@ -106,8 +106,12 @@ void UI::commandCenter(string input) {
 
     } else if (input == "search") {
         handleSearchCommand();
-    }  else if (input == "exit") {
 
+    } else if (input == "form connection") {
+        handleFormConnection();
+
+    } else if (input == "exit") {
+        cout << endl;
         cout << "Thanks for using our database program!" << endl;
         cout << endl;
         exit(0);
@@ -236,6 +240,7 @@ vector<Computer> UI::computerSearchSwitch(char searchColumn) {
 
 void UI::displayPerson(vector<Person> results) {
     for(int i = 0; i < results.size(); i++) {
+        cout << "ID:\t\t" << results[i].getID() << endl;
         cout << "Name:\t\t" << results[i].getName() << endl;
         cout << "Gender:\t\t"<< results[i].getGender() << endl;
         cout << "Date of birth:\t" << results[i].getDayOfBirth() << endl;
@@ -246,11 +251,12 @@ void UI::displayPerson(vector<Person> results) {
 
 void UI::displayComputer(vector<Computer> results) {
     for(int i = 0; i < results.size(); i++) {
+        cout << "ID:\t\t" << results[i].getID() << endl;
         cout << "Name:\t\t" << results[i].getName() << endl;
         cout << "Build Year:\t"<< results[i].getBuildYear() << endl;
         cout << "Type:\t\t" << results[i].getType() << endl;
         if(results[i].getBuilt() == true) {
-            cout << "Built?\t\t" << "true)" << endl;
+            cout << "Built?\t\t" << "true" << endl;
         } else {
             cout << "Built?\t\t" << "false" << endl;
         }
@@ -260,6 +266,8 @@ void UI::displayComputer(vector<Computer> results) {
 
 void UI::displayAllPersons(vector<Person> vec) {
     cout << endl;
+    cout.width(6);
+    cout << left << "ID:";
     cout.width(36);
     cout << left << "Name:";
     cout.width(18);
@@ -273,7 +281,8 @@ void UI::displayAllPersons(vector<Person> vec) {
     }
     cout << endl;
     for(int i = 0; i < vec.size(); i++) {
-
+        cout.width(6);
+        cout << left << vec[i].getID();
         cout.width(36);
         cout << left << vec[i].getName();
         cout.width(18);
@@ -293,6 +302,8 @@ void UI::displayAllPersons(vector<Person> vec) {
 
 void UI::displayAllComputers(vector<Computer> vec) {
     cout << endl;
+    cout.width(6);
+    cout << left << "ID:";
     cout.width(30);
     cout << left << "Name:";
     cout.width(18);
@@ -306,7 +317,8 @@ void UI::displayAllComputers(vector<Computer> vec) {
     }
     cout << endl;
     for(int i = 0; i < vec.size(); i++) {
-
+        cout.width(6);
+        cout << left << vec[i].getID();
         cout.width(30);
         cout << left << vec[i].getName();
         cout.width(18);
@@ -366,7 +378,8 @@ void UI::handleHelpCommand() {
     cout << "help\t\t ->  \t(get list of commands)\n";
     cout << "add\t\t ->  \t(add to repository)\n";
     cout << "display\t\t ->  \t(displays repository (optionally sorted))\n";
-    cout << "connections\t\t ->  \t(displays all connections)\n";
+    cout << "connections\t ->  \t(displays all connections)\n";
+    cout << "form connection\t ->  \t(input a connection into the database)\n";
     cout << "clear\t\t ->  \t(clears display)\n";
     cout << "search\t\t ->  \t(search in repository)\n";
     cout << "exit\t\t ->  \t(quit)\n";
@@ -411,6 +424,10 @@ void UI::handleAddCommand() {
         } else {
              cout << "ERROR: invalid computer entered!" << endl;
         }
+    } else {
+        cout << endl;
+        cout << "ERROR: Invalid input!" << endl;
+        cout << endl;
     }
 }
 void UI::handleSearchCommand(){
@@ -481,5 +498,24 @@ void UI::handleDisplayCommand() {
         vector<Computer> SortedComputers = Cservice.getSortedComputers(sortOrder);
         displayAllComputers(SortedComputers);
     }
+}
 
+void UI::handleFormConnection() {
+    int PersonID, ComputerID;
+    cout << "To make a connection, input the IDs of the person and computer you wish to form a connection between." << endl;
+    cout << "Please input a person ID: ";
+    cin >> PersonID;
+    cout << "Please input a computer ID: ";
+    cin >> ComputerID;
+    bool connectionFormed = Cservice.connectComputerToScientist(PersonID, ComputerID);
+    if(connectionFormed) {
+        cout << endl;
+        cout << "The connection has been formed!" << endl;
+        cout << endl;
+    } else {
+        cout << endl;
+        cout << "ERROR: Connection not formed (May already exist)!" << endl;
+        cout << endl;
+    }
+    cin.ignore();
 }

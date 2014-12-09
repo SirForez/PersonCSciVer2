@@ -35,6 +35,7 @@ public:
     void handleSearchCommand();
     void handleDisplayCommand();
 
+    void handleFormConnection();
 private:
     PersonService Pservice;
     computerservice Cservice;
