@@ -30,6 +30,11 @@ public:
     vector<Person> personSearchSwitch(char searchColumn);
 
     void displayConnections(vector<Person> sortedPersons);
+    void handleHelpCommand();
+    void handleAddCommand();
+    void handleSearchCommand();
+    void handleDisplayCommand();
+
 private:
     PersonService Pservice;
     computerservice Cservice;

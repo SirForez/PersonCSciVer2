@@ -90,159 +90,24 @@ bool UI::isValidCommand(string input) {
 
 void UI::commandCenter(string input) {
     if (input == "help") {
-        cout << "Available commands:\n";
-        cout << endl;
-        cout << "help\t\t ->  \t(get list of commands)\n";
-        cout << "add\t\t ->  \t(add to repository)\n";
-        cout << "display\t\t ->  \t(displays repository (optionally sorted))\n";
-        cout << "connections\t\t ->  \t(displays all connections)\n";
-        cout << "clear\t\t ->  \t(clears display)\n";
-        cout << "search\t\t ->  \t(search in repository)\n";
-        cout << "exit\t\t ->  \t(quit)\n";
-        cout << endl << endl;
-        cout << "Interaction:\n";
-        cout << ">>\t\t (waiting for command)\n";
-        cout << "All changes and additions are saved automatically!\n";
-        cout << endl << endl;
+        handleHelpCommand();
 
     } else if (input == "add") {
-        string answer;
-        cout << "Person or computer? ";
-        getline(cin, answer);
-        if(answer == "person") {
-            Person temp;
-            getPersonInput(temp);
-            if(temp.isValidPerson()) {
-                bool added = Pservice.add(temp);
-                if(added) {
-                    cout << endl;
-                    cout << "Person added!" << endl;
-                    cout << endl;
-                } else {
-                    cout << "ERROR: Person not added!" << endl;
-                }
-            } else {
-                cout << "ERROR: invalid person entered!" << endl;
-                cout << endl;
-            }
-        } else if(answer == "computer") {
-            Computer temp;
-            getComputerInput(temp);
-            if(temp.isValidComputer()) {
-                bool added = Cservice.add(temp);
-                if(added) {
-                    cout << endl;
-                    cout << "Computer added!" << endl;
-                    cout << endl;
-                } else {
-                    cout << "ERROR: Computer not added!" << endl;
-                }
-            } else {
-                cout << "ERROR: invalid computer entered!" << endl;
-            }
-        }
-    } else if (input == "display") {
-        string answer;
-        cout << "Person or computer? ";
-        getline(cin, answer);
-        if(answer == "person") {
-            cout << endl;
-            char ans;
-            string sortOrder;
-            cout << "Would you like to have it sorted (y/n)? ";
-            cin >> ans;
-            if(ans == 'Y' || ans == 'y') {
-                cout << endl;
-                cout << "Sort by (name/gender/date of birth/date of death)? ";
-                cin.ignore();
-                getline(cin, sortOrder);
-            } else {
-                cin.ignore();
-                sortOrder = "";
-            }
-            vector<Person> SortedPersons = Pservice.getSortedPersons(sortOrder);
-            displayAllPersons(SortedPersons);
-        } else if(answer == "computer") {
-            cout << endl;
-            char ans;
-            string sortOrder;
-            cout << "Would you like to have it sorted (y/n)? ";
-            cin >> ans;
-            if(ans == 'Y' || ans == 'y') {
-                cout << endl;
-                cout << "Sort by (name/buildyear/type/built)? ";
-                cin.ignore();
-                getline(cin, sortOrder);
-            } else {
-                cin.ignore();
-                sortOrder = "";
-            }
-            vector<Computer> SortedComputers = Cservice.getSortedComputers(sortOrder);
-            displayAllComputers(SortedComputers);
-        }
+        handleAddCommand();
 
+    } else if (input == "display") {
+        handleDisplayCommand();
 
     } else if (input == "clear") {
         system("cls");
-
-    } else if (input == "erase") {
-        /*string answer;
-        cout << "What would you like to erase (all/specific)? ";
-        getline(cin, answer);
-
-        vector<Person> searchResults;
-        if(answer == "specific") {
-            searchResults = searchSwitch(searchFor());
-        }
-        bool erased = Pservice.erase(searchResults, answer);
-        if(erased) {
-            cout << endl;
-            cout << "Person(s) erased!" << endl;
-            cout << endl;
-        }*/
 
     } else if (input == "connections") {
         displayConnections(Pservice.getSortedPersons("name"));
 
     } else if (input == "search") {
-        string searchType;
-        cout << "Search for a person or a computer (person/computer)? ";
-        getline(cin,searchType);
-        if(searchType != "person" && searchType != "computer") {
-            cout << "ERROR: Invalid type for search!" << endl;
-        }
-        char searchColumn = searchFor(searchType);
-        if(searchType == "person") {
-            vector<Person> result = personSearchSwitch(searchColumn);
-            if(result.size()) {
-                displayPerson(result);
-            } else {
-                cout << endl;
-                cout << "ERROR: No results found!" << endl;
-                cout << endl;
-            }
-        } else {
-            vector<Computer> result = computerSearchSwitch(searchColumn);
-            if(result.size()) {
-                displayComputer(result);
-            } else {
-                cout << endl;
-                cout << "ERROR: No results found!" << endl;
-                cout << endl;
-            }
-        }
-
+        handleSearchCommand();
     }  else if (input == "exit") {
-        /*if((editCounter != 0)) {
-            char answer;
-            cout << "You have unsaved changes, would you like to save (y/n)? ";
-            cin >> answer;
 
-            if(answer == 'y' || answer == 'Y') {
-                Pservice.save();
-            }
-        }
-*/
         cout << "Thanks for using our database program!" << endl;
         cout << endl;
         exit(0);
@@ -493,4 +358,128 @@ void UI::displayConnections(vector<Person> sortedPersons) {
         cout << "-";
     }
     cout << endl << endl;
+}
+
+void UI::handleHelpCommand() {
+    cout << "Available commands:\n";
+    cout << endl;
+    cout << "help\t\t ->  \t(get list of commands)\n";
+    cout << "add\t\t ->  \t(add to repository)\n";
+    cout << "display\t\t ->  \t(displays repository (optionally sorted))\n";
+    cout << "connections\t\t ->  \t(displays all connections)\n";
+    cout << "clear\t\t ->  \t(clears display)\n";
+    cout << "search\t\t ->  \t(search in repository)\n";
+    cout << "exit\t\t ->  \t(quit)\n";
+    cout << endl << endl;
+    cout << "Interaction:\n";
+    cout << ">>\t\t (waiting for command)\n";
+    cout << "All changes and additions are saved automatically!\n";
+    cout << endl << endl;
+}
+void UI::handleAddCommand() {
+    string answer;
+    cout << "Person or computer? ";
+    getline(cin, answer);
+    if(answer == "person") {
+        Person temp;
+        getPersonInput(temp);
+        if(temp.isValidPerson()) {
+            bool added = Pservice.add(temp);
+            if(added) {
+                cout << endl;
+                cout << "Person added!" << endl;
+                cout << endl;
+            } else {
+                cout << "ERROR: Person not added!" << endl;
+              }
+        } else {
+            cout << "ERROR: invalid person entered!" << endl;
+            cout << endl;
+          }
+    } else if(answer == "computer") {
+        Computer temp;
+        getComputerInput(temp);
+        if(temp.isValidComputer()) {
+             bool added = Cservice.add(temp);
+             if(added) {
+                 cout << endl;
+                 cout << "Computer added!" << endl;
+                 cout << endl;
+             } else {
+                   cout << "ERROR: Computer not added!" << endl;
+             }
+        } else {
+             cout << "ERROR: invalid computer entered!" << endl;
+        }
+    }
+}
+void UI::handleSearchCommand(){
+    string searchType;
+    cout << "Search for a person or a computer (person/computer)? ";
+    getline(cin,searchType);
+    if(searchType != "person" && searchType != "computer") {
+        cout << "ERROR: Invalid type for search!" << endl;
+    }
+    char searchColumn = searchFor(searchType);
+    if(searchType == "person") {
+        vector<Person> result = personSearchSwitch(searchColumn);
+        if(result.size()) {
+            displayPerson(result);
+        } else {
+            cout << endl;
+            cout << "ERROR: No results found!" << endl;
+            cout << endl;
+        }
+    } else {
+        vector<Computer> result = computerSearchSwitch(searchColumn);
+        if(result.size()) {
+            displayComputer(result);
+        } else {
+            cout << endl;
+            cout << "ERROR: No results found!" << endl;
+            cout << endl;
+        }
+    }
+
+}
+void UI::handleDisplayCommand() {
+    string answer;
+    cout << "Person or computer? ";
+    getline(cin, answer);
+    if(answer == "person") {
+        cout << endl;
+        char ans;
+        string sortOrder;
+        cout << "Would you like to have it sorted (y/n)? ";
+        cin >> ans;
+        if(ans == 'Y' || ans == 'y') {
+            cout << endl;
+            cout << "Sort by (name/gender/date of birth/date of death)? ";
+            cin.ignore();
+            getline(cin, sortOrder);
+        } else {
+            cin.ignore();
+            sortOrder = "";
+        }
+        vector<Person> SortedPersons = Pservice.getSortedPersons(sortOrder);
+        displayAllPersons(SortedPersons);
+    } else if(answer == "computer") {
+        cout << endl;
+        char ans;
+        string sortOrder;
+        cout << "Would you like to have it sorted (y/n)? ";
+        cin >> ans;
+        if(ans == 'Y' || ans == 'y') {
+            cout << endl;
+            cout << "Sort by (name/buildyear/type/built)? ";
+            cin.ignore();
+            getline(cin, sortOrder);
+        } else {
+            cin.ignore();
+            sortOrder = "";
+        }
+        vector<Computer> SortedComputers = Cservice.getSortedComputers(sortOrder);
+        displayAllComputers(SortedComputers);
+    }
+
 }
