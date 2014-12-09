@@ -366,7 +366,7 @@ void UI::handleHelpCommand() {
     cout << "help\t\t ->  \t(get list of commands)\n";
     cout << "add\t\t ->  \t(add to repository)\n";
     cout << "display\t\t ->  \t(displays repository (optionally sorted))\n";
-    cout << "connections\t\t ->  \t(displays all connections)\n";
+    cout << "connections\t ->  \t(displays all connections)\n";
     cout << "clear\t\t ->  \t(clears display)\n";
     cout << "search\t\t ->  \t(search in repository)\n";
     cout << "exit\t\t ->  \t(quit)\n";
@@ -383,7 +383,7 @@ void UI::handleAddCommand() {
     if(answer == "person") {
         Person temp;
         getPersonInput(temp);
-        if(temp.isValidPerson()) {
+        if(temp.isValidPerson()) { //Checks if added person meets requirements to be added
             bool added = Pservice.add(temp);
             if(added) {
                 cout << endl;
@@ -399,7 +399,7 @@ void UI::handleAddCommand() {
     } else if(answer == "computer") {
         Computer temp;
         getComputerInput(temp);
-        if(temp.isValidComputer()) {
+        if(temp.isValidComputer()) { //Checks if computer meets requirements to be added
              bool added = Cservice.add(temp);
              if(added) {
                  cout << endl;
